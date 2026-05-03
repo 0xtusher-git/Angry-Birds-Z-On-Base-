@@ -13,6 +13,7 @@ const Engine = {
   pigs: [],
   blocks: [],
   ground: null,
+  groundY: 0,
   walls: [],
   launchedBird: null,
   slingshotConstraint: null,
@@ -44,17 +45,17 @@ const Engine = {
   init(W, H) {
     const { Engine: Eng, World, Bodies, Events } = Matter;
     this.W = W; this.H = H;
-    // Portrait layout: Slingshot at bottom area
-    this.slingshotX = W * 0.22;
-    this.slingshotY = H * 0.78;
+    const isPortrait = H > W;
+    this.slingshotX = W * 0.25;
+    this.slingshotY = isPortrait ? H * 0.75 : H * 0.82;
 
     this.engine = Eng.create({ gravity: { y: 1.2 } });
     this.world  = this.engine.world;
     this.birds = []; this.pigs = []; this.blocks = [];
 
     // Ground + walls
-    const groundY = H * 0.88;
-    const ground = Bodies.rectangle(W/2, groundY + 20, W*3, 40, { isStatic:true, friction:0.8, label:'ground' });
+    this.groundY = isPortrait ? H * 0.80 : H * 0.88;
+    const ground = Bodies.rectangle(W/2, this.groundY + 20, W*3, 40, { isStatic:true, friction:0.8, label:'ground' });
     const wallL  = Bodies.rectangle(-20, H/2, 40, H*2, { isStatic:true, label:'wall' });
     const wallR  = Bodies.rectangle(W+20, H/2, 40, H*2, { isStatic:true, label:'wall' });
     World.add(this.world, [ground, wallL, wallR]);
@@ -76,17 +77,17 @@ const Engine = {
     if (toRemove.length) World.remove(this.world, toRemove);
     this.birds = []; this.pigs = []; this.blocks = []; this.launchedBird = null;
 
-    // Ground baseline
-    const groundY = H * 0.88;
     const isPortrait = H > W;
     const structureScale = isPortrait ? Math.min(W / 450, 1.0) : 1.0;
+    // Normalized ground in level data is 0.88. Map it to current groundY.
+    const groundOffset = this.groundY - (0.88 * H);
 
     // Spawn blocks
     for (const bd of levelDef.blocks) {
       const bw = bd.w * W * structureScale;
       const bh = bd.h * H * (isPortrait ? 0.8 : 1.0);
       const bx = bd.x * W;
-      const by = isPortrait ? (bd.y * H - H * 0.3) : (bd.y * H);
+      const by = bd.y * H + groundOffset;
       const props = this.BLOCK_PROPS[bd.type];
       const body = Bodies.rectangle(bx + bw/2, by + bh/2, bw, bh, {
         density: props.density,
@@ -110,7 +111,7 @@ const Engine = {
       const props = this.PIG_PROPS[pd.type];
       const r = props.r * structureScale;
       const px = pd.x * W;
-      const py = isPortrait ? (pd.y * H - H * 0.3) : (pd.y * H);
+      const py = pd.y * H + groundOffset;
       const body = Matter.Bodies.circle(px, py, r, {
         density: props.density,
         restitution: 0.2,
