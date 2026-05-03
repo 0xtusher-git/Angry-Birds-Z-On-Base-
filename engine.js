@@ -44,9 +44,9 @@ const Engine = {
   init(W, H) {
     const { Engine: Eng, World, Bodies, Events } = Matter;
     this.W = W; this.H = H;
-    this.slingshotX = W * 0.15;
-    // Canvas is offset 56px for HUD, slingshot sits on the ground line at 88% of canvas height
-    this.slingshotY = H * 0.82;
+    // Portrait layout: Slingshot at bottom area
+    this.slingshotX = W * 0.22;
+    this.slingshotY = H * 0.78;
 
     this.engine = Eng.create({ gravity: { y: 1.2 } });
     this.world  = this.engine.world;
@@ -78,13 +78,15 @@ const Engine = {
 
     // Ground baseline
     const groundY = H * 0.88;
+    const isPortrait = H > W;
+    const structureScale = isPortrait ? Math.min(W / 450, 1.0) : 1.0;
 
     // Spawn blocks
     for (const bd of levelDef.blocks) {
-      const bw = bd.w * W;
-      const bh = bd.h * H;
+      const bw = bd.w * W * structureScale;
+      const bh = bd.h * H * (isPortrait ? 0.8 : 1.0);
       const bx = bd.x * W;
-      const by = bd.y * H;
+      const by = isPortrait ? (bd.y * H - H * 0.3) : (bd.y * H);
       const props = this.BLOCK_PROPS[bd.type];
       const body = Bodies.rectangle(bx + bw/2, by + bh/2, bw, bh, {
         density: props.density,
@@ -106,9 +108,10 @@ const Engine = {
     // Spawn pigs
     for (const pd of levelDef.pigs) {
       const props = this.PIG_PROPS[pd.type];
+      const r = props.r * structureScale;
       const px = pd.x * W;
-      const py = pd.y * H;
-      const body = Matter.Bodies.circle(px, py, props.r, {
+      const py = isPortrait ? (pd.y * H - H * 0.3) : (pd.y * H);
+      const body = Matter.Bodies.circle(px, py, r, {
         density: props.density,
         restitution: 0.2,
         friction: 0.5,
@@ -119,7 +122,7 @@ const Engine = {
       const pigObj = {
         body, type: pd.type,
         health: props.health, maxHealth: props.health,
-        r: props.r, state: 'happy', dead: false
+        r, state: 'happy', dead: false
       };
       this.pigs.push(pigObj);
       World.add(this.world, body);
