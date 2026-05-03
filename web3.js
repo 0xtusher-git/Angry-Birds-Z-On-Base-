@@ -7,6 +7,8 @@ const BASE_CHAIN_ID = 8453;
 const BASE_CHAIN_HEX = '0x2105';
 const PLAY_COST_WEI = '1000000000000'; // 0.000001 ETH
 const SESSION_KEY = 'abz_session';
+const LAST_ACTIVE_KEY = 'abz_last_active';
+const MAX_IDLE_TIME = 5 * 60 * 1000; // 5 minutes in ms
 
 let provider = null;
 let signer = null;
@@ -99,6 +101,7 @@ async function payToPlay() {
     // Save session
     const session = { txHash: tx.hash, ts: Date.now() };
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    updateLastActive();
 
     document.getElementById('tx-link-final').href = txLink;
     document.getElementById('tx-link-final').textContent = shortTx(tx.hash) + ' → Basescan';
@@ -121,11 +124,30 @@ function checkExistingSession() {
   if (!raw) return false;
   try {
     const s = JSON.parse(raw);
-    return !!s.txHash;
+    if (!s.txHash) return false;
+
+    // Check idle time
+    const lastActive = parseInt(localStorage.getItem(LAST_ACTIVE_KEY) || '0');
+    if (lastActive > 0 && (Date.now() - lastActive > MAX_IDLE_TIME)) {
+      console.log('Session expired due to inactivity');
+      clearSession();
+      return false;
+    }
+
+    // Refresh last active on check
+    updateLastActive();
+    return true;
   } catch { return false; }
 }
 
-function clearSession() { localStorage.removeItem(SESSION_KEY); }
+function updateLastActive() {
+  localStorage.setItem(LAST_ACTIVE_KEY, Date.now().toString());
+}
+
+function clearSession() { 
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(LAST_ACTIVE_KEY);
+}
 
 function showPaymentGate() {
   document.getElementById('wallet-gate').classList.add('active');
@@ -166,4 +188,21 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch {}
     showGateStep('step-unlocked');
   }
+
+  // Continuous activity tracking
+  setInterval(() => {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (raw) updateLastActive();
+  }, 10000); // every 10s
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      // Re-check session on return
+      if (!checkExistingSession() && !document.getElementById('wallet-gate').classList.contains('active')) {
+        location.reload(); // Force payment gate if expired while away
+      }
+    } else {
+      updateLastActive();
+    }
+  });
 });
