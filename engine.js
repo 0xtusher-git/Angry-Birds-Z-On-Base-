@@ -85,15 +85,11 @@ const Engine = {
     // Spawn blocks
     for (const bd of levelDef.blocks) {
       const bw = bd.w * W * structureScale;
-      const bh = bd.h * H; // Keep vertical scale consistent
+      const bh = bd.h * H * (isPortrait ? 0.8 : 1.0);
       const bx = bd.x * W;
-      // bd.y is the baseline in level data (0.88). 
-      // We want the block's BOTTOM edge to be at: (bd.y * H + groundOffset)
-      const by_bottom = bd.y * H + groundOffset;
-      const by_center = by_bottom - bh/2;
-
+      const by = bd.y * H + groundOffset;
       const props = this.BLOCK_PROPS[bd.type];
-      const body = Bodies.rectangle(bx + bw/2, by_center, bw, bh, {
+      const body = Bodies.rectangle(bx + bw/2, by + bh/2, bw, bh, {
         density: props.density,
         restitution: props.restitution,
         friction: props.friction,
@@ -115,7 +111,7 @@ const Engine = {
       const props = this.PIG_PROPS[pd.type];
       const r = props.r * structureScale;
       const px = pd.x * W;
-      const py = pd.y * H + groundOffset; // Pigs are circles, py is center.
+      const py = pd.y * H + groundOffset;
       const body = Matter.Bodies.circle(px, py, r, {
         density: props.density,
         restitution: 0.2,
