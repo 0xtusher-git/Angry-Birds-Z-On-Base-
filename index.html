@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Angry Birds Z — Pay to Play on Base</title>
+  <meta name="description" content="Angry Birds-style slingshot game on Base blockchain. Pay 0.000001 ETH to play. Destroy all pigs and conquer every level!" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ── WALLET GATE OVERLAY ── -->
+  <div id="wallet-gate" class="overlay active">
+    <div class="gate-card">
+
+      <!-- Step 1: Connect -->
+      <div id="step-connect" class="gate-step active">
+        <p class="gate-desc">Connect your wallet to get started</p>
+        <button id="btn-connect" class="btn-primary" onclick="connectWallet()">
+          <span class="btn-icon">🔵</span> Wallet Connect
+        </button>
+        <button class="btn-secondary" onclick="startGame()" style="margin-top: 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          🛠️ Local Testing
+        </button>
+        <p class="gate-hint">Requires a Web3 Wallet on Base Mainnet</p>
+      </div>
+
+      <!-- Step 2: Pay -->
+      <div id="step-pay" class="gate-step">
+        <div class="wallet-info">
+          <span class="wallet-label">Connected:</span>
+          <span id="wallet-address" class="wallet-addr">-</span>
+        </div>
+        <div class="price-box">
+          <div class="price-amount">0.000001 ETH</div>
+          <div class="price-usd">per play session</div>
+        </div>
+        <button id="btn-pay" class="btn-primary btn-pay" onclick="payToPlay()">
+          <span class="btn-icon">⚡</span> Pay to Play
+        </button>
+        <p class="gate-hint">Transaction on Base Mainnet (Chain 8453)</p>
+      </div>
+
+      <!-- Step 3: Confirming -->
+      <div id="step-confirming" class="gate-step">
+        <div class="spinner-wrap">
+          <div class="spinner"></div>
+        </div>
+        <p class="gate-desc">Confirming transaction on Base…</p>
+        <div id="tx-hash-preview" class="tx-link-wrap" style="display:none">
+          <a id="tx-link" href="#" target="_blank" class="tx-link">View on Basescan →</a>
+        </div>
+      </div>
+
+      <!-- Step 4: Unlocked -->
+      <div id="step-unlocked" class="gate-step">
+        <div class="success-icon">✅</div>
+        <h2>Payment Confirmed!</h2>
+        <div id="tx-hash-final" class="tx-link-wrap">
+          <a id="tx-link-final" href="#" target="_blank" class="tx-link">View on Basescan →</a>
+        </div>
+        <button class="btn-primary btn-play" onclick="startGame()">
+          🎮 Start Playing!
+        </button>
+      </div>
+
+      <!-- Error banner -->
+      <div id="gate-error" class="gate-error" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ── GAME CONTAINER ── -->
+  <div id="game-container" style="display:none">
+    <!-- HUD -->
+    <div id="hud">
+      <div class="hud-left">
+        <div class="hud-item">
+          <span class="hud-label">LEVEL</span>
+          <span id="hud-level" class="hud-value">1</span>
+        </div>
+      </div>
+      <div class="hud-center">
+        <div class="hud-item">
+          <span class="hud-label">SCORE</span>
+          <span id="hud-score" class="hud-value">0</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <div id="bird-queue" class="bird-queue"></div>
+        <button id="btn-pause" class="btn-pause" onclick="togglePause()">⏸</button>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Level Select Screen -->
+    <div id="screen-levelselect" class="screen" style="display:none">
+      <div class="screen-card">
+        <h2 class="screen-title">🗺️ Level Select</h2>
+        <div id="level-grid" class="level-grid"></div>
+        <button class="btn-secondary" onclick="showPaymentGate()">🔙 Main Menu</button>
+      </div>
+    </div>
+
+    <!-- Level Complete Screen -->
+    <div id="screen-complete" class="screen" style="display:none">
+      <div class="screen-card">
+        <h2 class="screen-title">🎉 Level Complete!</h2>
+        <div class="stars-display" id="stars-display"></div>
+        <div class="score-summary">
+          <div class="score-row"><span>Pigs Destroyed</span><span id="sc-pigs">0</span></div>
+          <div class="score-row"><span>Blocks Destroyed</span><span id="sc-blocks">0</span></div>
+          <div class="score-row"><span>Birds Remaining</span><span id="sc-birds">0</span></div>
+          <div class="score-row total"><span>TOTAL</span><span id="sc-total">0</span></div>
+        </div>
+        <div class="screen-buttons">
+          <button class="btn-secondary" onclick="showLevelSelect()">🗺️ Level Select</button>
+          <button class="btn-primary" id="btn-next-level" onclick="nextLevel()">Next Level →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="screen-gameover" class="screen" style="display:none">
+      <div class="screen-card">
+        <h2 class="screen-title">💀 Game Over</h2>
+        <p class="go-desc">You ran out of birds! No pigs destroyed this round.</p>
+        <div class="screen-buttons">
+          <button class="btn-secondary" onclick="showLevelSelect()">🗺️ Level Select</button>
+          <button class="btn-primary" onclick="retryOrPay()">🔄 Retry / Pay Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CDN Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+  <!-- Game modules (order matters) -->
+  <script src="particles.js"></script>
+  <script src="renderer.js"></script>
+  <script src="levels.js"></script>
+  <script src="engine.js"></script>
+  <script src="game.js"></script>
+  <script src="web3.js"></script>
+</body>
+</html>
