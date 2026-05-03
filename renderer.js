@@ -46,9 +46,11 @@ const R = {
   drawBackground(clouds) {
     const { ctx, W, H } = this;
     // Sky gradient
-    const sky = ctx.createLinearGradient(0, 0, 0, H * 0.75);
+    // Sky gradient — fill the whole height
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
     sky.addColorStop(0, '#1a6eb5');
-    sky.addColorStop(1, '#7ed6f7');
+    sky.addColorStop(0.6, '#7ed6f7');
+    sky.addColorStop(1, '#a3e4ff');
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 

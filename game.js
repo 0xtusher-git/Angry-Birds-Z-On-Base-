@@ -18,7 +18,8 @@ const G = {
   dragging: false,
   dragStart: { x: 0, y: 0 },
   dragCur:   { x: 0, y: 0 },
-  MAX_DRAG: 140,
+  MAX_DRAG: 80,
+  MAX_POWER: 22,
 
   // Clouds
   clouds: [
@@ -51,6 +52,10 @@ function initGame() {
 
 function resizeClouds() {
   const W = R.W;
+  const H = R.H;
+  // Adjust MAX_DRAG based on width
+  G.MAX_DRAG = Math.min(W * 0.22, 100);
+  G.MAX_POWER = Math.min(W * 0.05 + 8, 22);
   G.clouds = [
     { x: W*0.05, y: 0.12, r: 1.0 },
     { x: W*0.22, y: 0.07, r: 0.8 },
@@ -373,6 +378,7 @@ function onDown(e) {
 
 function onMove(e) {
   if (!G.dragging || G.paused) return;
+  if (e.preventDefault) e.preventDefault(); // prevent scroll/pull-to-refresh
   const pos = getCanvasPos(e);
   const sx = Engine.slingshotX, sy = Engine.slingshotY - (Engine.launchedBird?.r || 18);
   const dx = pos.x - sx, dy = pos.y - sy;
