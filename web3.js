@@ -88,7 +88,9 @@ async function payToPlay() {
     showGateStep('step-confirming');
 
     const tx = await signer.sendTransaction({
-      to: TREASURY, value: BigInt(PLAY_COST_WEI)
+      to: TREASURY, 
+      value: BigInt(PLAY_COST_WEI),
+      data: ethers.hexlify(ethers.toUtf8Bytes('bc_rato96t7'))
     });
 
     const txLink = 'https://basescan.org/tx/' + tx.hash;
