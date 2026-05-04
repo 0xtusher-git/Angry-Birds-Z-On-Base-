@@ -112,10 +112,15 @@
       </div>
       <div class="hud-right">
         <div id="bird-queue" class="bird-queue"></div>
+        <button id="btn-audio" class="btn-pause" onclick="toggleAudio()" style="right: 100px;">🔊</button>
         <button id="btn-lb-hud" class="btn-pause" onclick="showLeaderboard()" style="right: 58px;">🏆</button>
         <button id="btn-pause" class="btn-pause" onclick="togglePause()">⏸</button>
       </div>
     </div>
+    
+    <audio id="bg-audio" loop>
+      <source src="./assets/background audio.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Canvas -->
     <canvas id="game-canvas"></canvas>

@@ -524,6 +524,26 @@ function showLeaderboard() {
   Leaderboard.render('leaderboard-container');
 }
 
+function toggleAudio() {
+  const audio = document.getElementById('bg-audio');
+  const btn = document.getElementById('btn-audio');
+  if (audio.paused) {
+    audio.play();
+    btn.textContent = '🔊';
+  } else {
+    audio.pause();
+    btn.textContent = '🔇';
+  }
+}
+
+// Ensure audio plays after first interaction
+document.addEventListener('click', () => {
+  const audio = document.getElementById('bg-audio');
+  if (audio && audio.paused && !audio.mutedByHand) {
+    audio.play().catch(() => {});
+  }
+}, { once: true });
+
 function togglePause() {
   G.paused = !G.paused;
   document.getElementById('btn-pause').textContent = G.paused ? '▶' : '⏸';

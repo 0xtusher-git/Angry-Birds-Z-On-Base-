@@ -2,6 +2,9 @@
    LEADERBOARD SYSTEM — leaderboard.js
    ═══════════════════════════════════════════ */
 
+const DREAMLO_PUBLIC_KEY = '663673f88ad4d123d4fa0192'; // REPLACE WITH YOUR DREAMLO PUBLIC KEY
+const DREAMLO_PRIVATE_KEY = ''; // OPTIONAL: REPLACE WITH YOUR DREAMLO PRIVATE KEY FOR WRITING
+
 const Leaderboard = {
   storageKey: 'abz_leaderboard',
   
@@ -12,6 +15,45 @@ const Leaderboard = {
     if (!existing || existing.includes('Vitalik.eth')) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
     }
+    this.refresh(); // Initial fetch
+  },
+
+  async refresh() {
+    if (DREAMLO_PUBLIC_KEY) {
+      await this.fetchGlobalScores();
+    }
+  },
+
+  async fetchGlobalScores() {
+    try {
+      const resp = await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PUBLIC_KEY}/json`);
+      const data = await resp.json();
+      if (data && data.dreamlo && data.dreamlo.leaderboard) {
+        let entries = data.dreamlo.leaderboard.entry;
+        if (!entries) entries = [];
+        if (!Array.isArray(entries)) entries = [entries];
+        
+        const scores = entries.map(e => ({
+          name: e.name,
+          score: parseInt(e.score),
+          level: parseInt(e.seconds), // We use 'seconds' field for level
+          ts: e.date,
+          isUser: e.name === localStorage.getItem('abz_username')
+        }));
+        
+        localStorage.setItem(this.storageKey, JSON.stringify(scores));
+      }
+    } catch (e) { console.warn('Global fetch failed', e); }
+  },
+
+  async submitGlobalScore(name, score, level) {
+    if (!DREAMLO_PRIVATE_KEY) return;
+    try {
+      // dreamlo format: /add/PIPE-NAME/SCORE/SECONDS/TEXT
+      // We use 'seconds' for level and 'text' for timestamp
+      await fetch(`https://www.dreamlo.com/lb/${DREAMLO_PRIVATE_KEY}/add/${encodeURIComponent(name)}/${score}/${level}`);
+      await this.fetchGlobalScores();
+    } catch (e) { console.warn('Global submit failed', e); }
   },
 
   getScores() {
@@ -20,32 +62,23 @@ const Leaderboard = {
 
   submitScore(name, score, level) {
     let scores = this.getScores();
-    
-    // Find if user already has a score
     const existingIdx = scores.findIndex(s => s.name === name);
     
     if (existingIdx !== -1) {
-      // Only update if the new score is higher
       if (score > scores[existingIdx].score) {
         scores[existingIdx].score = score;
         scores[existingIdx].level = level;
         scores[existingIdx].ts = Date.now();
+        this.submitGlobalScore(name, score, level);
       }
     } else {
-      // Add new player entry
       scores.push({ name, score, level, ts: Date.now(), isUser: true });
+      this.submitGlobalScore(name, score, level);
     }
     
-    // Sort by score descending
     scores.sort((a, b) => b.score - a.score);
-    // Keep top 100 unique players
     scores = scores.slice(0, 100);
-    
     localStorage.setItem(this.storageKey, JSON.stringify(scores));
-    
-    // IMPORTANT: For true global sync across all users, 
-    // a backend (Firebase/Supabase) is required here.
-    // this.syncWithGlobal(name, score, level); 
   },
 
   render(containerId) {
