@@ -163,11 +163,9 @@ function isLevelUnlocked(idx) {
   return unlocked.includes(idx);
 }
 
-function showLevelPaymentGate(levelIdx) {
+async function showLevelPaymentGate(levelIdx) {
   const gate = document.getElementById('wallet-gate');
   gate.classList.add('active');
-  // Don't hide game-container, keep it in background
-  // document.getElementById('game-container').style.display = 'none'; 
   
   // Reset steps
   document.querySelectorAll('.gate-step').forEach(s => s.classList.remove('active'));
@@ -178,11 +176,21 @@ function showLevelPaymentGate(levelIdx) {
   const payBtn = document.getElementById('btn-pay');
   payBtn.onclick = () => payToPlay(levelIdx);
   
+  // Try to reconnect signer if null
+  if (!signer && window.ethereum) {
+    try {
+      provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.listAccounts();
+      if (accounts.length > 0) {
+        signer = await provider.getSigner();
+        const addr = await signer.getAddress();
+        document.getElementById('wallet-address').textContent = shortAddr(addr);
+      }
+    } catch (e) { console.warn('Auto-reconnect failed', e); }
+  }
+
   if (signer) {
-    // If already connected, we can try to trigger payment immediately or show the pay step
     showGateStep('step-pay');
-    // Optional: Auto-trigger payToPlay(levelIdx) for maximum seamlessness
-    // payToPlay(levelIdx); 
   } else {
     showGateStep('step-connect');
   }
