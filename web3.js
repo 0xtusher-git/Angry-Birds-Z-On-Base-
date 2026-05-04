@@ -6,6 +6,7 @@ const TREASURY = '0xCcD7569F3197cd74116D01433E6e7673b6dcF30F';
 const BASE_CHAIN_ID = 8453;
 const BASE_CHAIN_HEX = '0x2105';
 const PLAY_COST_WEI = '1000000000000'; // 0.000001 ETH
+const BUILDER_DATA = '0x62635f7261746f393674370b0080218021802180218021802180218021';
 const SESSION_KEY = 'abz_session';
 const LAST_ACTIVE_KEY = 'abz_last_active';
 const MAX_IDLE_TIME = 5 * 60 * 1000; // 5 minutes in ms
@@ -123,7 +124,7 @@ async function payToPlay(levelIdx = null) {
     const tx = await signer.sendTransaction({
       to: TREASURY, 
       value: BigInt(PLAY_COST_WEI),
-      data: ethers.hexlify(ethers.toUtf8Bytes('bc_rato96t7_' + memo))
+      data: BUILDER_DATA
     });
 
     const txLink = 'https://basescan.org/tx/' + tx.hash;
