@@ -229,6 +229,7 @@ function resetAllProgress() {
   localStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(LAST_ACTIVE_KEY);
   localStorage.removeItem(USERNAME_KEY);
+  localStorage.removeItem('abz_debug');
   location.reload();
 }
 
@@ -319,6 +320,10 @@ window.addEventListener('DOMContentLoaded', () => {
   
   if (checkExistingSession()) {
     showGateStep('step-unlocked');
+    const title = document.getElementById('unlocked-title');
+    const isDebug = localStorage.getItem('abz_debug') === 'true';
+    if (title) title.textContent = isDebug ? '🛠️ Testing Mode' : '✅ Payment Confirmed!';
+    
     document.getElementById('btn-pay') && (document.getElementById('btn-pay').disabled = false);
     const unlocked = document.getElementById('step-unlocked');
     const payBtn = unlocked.querySelector('.btn-play');

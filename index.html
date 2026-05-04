@@ -62,12 +62,15 @@
       <!-- Step 4: Unlocked -->
       <div id="step-unlocked" class="gate-step">
         <div class="success-icon">✅</div>
-        <h2>Payment Confirmed!</h2>
+        <h2 id="unlocked-title">Payment Confirmed!</h2>
         <div id="tx-hash-final" class="tx-link-wrap">
           <a id="tx-link-final" href="#" target="_blank" class="tx-link">View on Basescan →</a>
         </div>
         <button class="btn-primary btn-play" onclick="checkRegistration()">
-          🎮 Continue to Game
+          🎮 Continue Playing!
+        </button>
+        <button class="btn-secondary" onclick="resetAllProgress()" style="margin-top: 12px; width: 100%; border: none; font-size: 0.8rem; color: var(--text-muted);">
+          ← Back to Connect / Change Account
         </button>
       </div>
 
