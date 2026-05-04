@@ -321,7 +321,14 @@ function endLevel(won) {
       localStorage.setItem(key, JSON.stringify({ stars, score: G.score }));
     }
 
-    setTimeout(() => showLevelComplete(stars, birdsLeft), 800);
+    setTimeout(() => {
+      showLevelComplete(stars, birdsLeft);
+      // Auto-submit score if username exists
+      const name = localStorage.getItem('abz_username');
+      if (name) {
+        Leaderboard.submitScore(name, G.score, G.currentLevel + 1);
+      }
+    }, 800);
   } else {
     setTimeout(() => showGameOver(), 800);
   }
@@ -515,17 +522,6 @@ function showLeaderboard() {
   hideAllScreens();
   document.getElementById('screen-leaderboard').style.display = 'flex';
   Leaderboard.render('leaderboard-container');
-}
-
-function submitCurrentScore() {
-  const nameInput = document.getElementById('player-name');
-  const name = nameInput.value.trim() || 'Anonymous';
-  Leaderboard.submitScore(name, G.score, G.currentLevel + 1);
-  
-  const btn = document.getElementById('btn-submit-score');
-  btn.textContent = '✅ Submitted!';
-  btn.disabled = true;
-  nameInput.disabled = true;
 }
 
 function togglePause() {

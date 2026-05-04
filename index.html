@@ -66,13 +66,31 @@
         <div id="tx-hash-final" class="tx-link-wrap">
           <a id="tx-link-final" href="#" target="_blank" class="tx-link">View on Basescan →</a>
         </div>
-        <button class="btn-primary btn-play" onclick="startGame()">
-          🎮 Start Playing!
+        <button class="btn-primary btn-play" onclick="checkRegistration()">
+          🎮 Continue to Game
         </button>
+      </div>
+
+      <!-- Step 5: Register Username -->
+      <div id="step-register" class="gate-step">
+        <div class="success-icon">📝</div>
+        <h2>Register Player</h2>
+        <p class="gate-desc">Set your username for the global leaderboard</p>
+        <div class="lb-submit-box">
+          <input type="text" id="reg-username" placeholder="Username" maxlength="15" />
+          <button class="btn-submit" onclick="registerUser()">Save</button>
+        </div>
+        <p class="gate-hint">This name will be visible to all players</p>
       </div>
 
       <!-- Error banner -->
       <div id="gate-error" class="gate-error" style="display:none"></div>
+      
+      <!-- Home Leaderboard -->
+      <div class="home-leaderboard">
+        <h3 class="lb-title">🏆 Top Players</h3>
+        <div id="home-leaderboard-container" class="leaderboard-container"></div>
+      </div>
     </div>
   </div>
 
@@ -134,10 +152,6 @@
           <div class="score-row"><span>Blocks Destroyed</span><span id="sc-blocks">0</span></div>
           <div class="score-row"><span>Birds Remaining</span><span id="sc-birds">0</span></div>
           <div class="score-row total"><span>TOTAL</span><span id="sc-total">0</span></div>
-        </div>
-        <div class="lb-submit-box">
-          <input type="text" id="player-name" placeholder="Enter your name" maxlength="15" />
-          <button id="btn-submit-score" class="btn-submit" onclick="submitCurrentScore()">Submit Score</button>
         </div>
         <div class="screen-buttons">
           <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>

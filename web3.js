@@ -10,6 +10,7 @@ const SESSION_KEY = 'abz_session';
 const LAST_ACTIVE_KEY = 'abz_last_active';
 const MAX_IDLE_TIME = 5 * 60 * 1000; // 5 minutes in ms
 const UNLOCKED_LEVELS_KEY = 'abz_unlocked_levels';
+const USERNAME_KEY = 'abz_username';
 
 let provider = null;
 let signer = null;
@@ -122,25 +123,21 @@ async function payToPlay(levelIdx = null) {
     document.getElementById('tx-link-final').textContent = shortTx(tx.hash) + ' → Basescan';
     showGateStep('step-unlocked');
     
-    // Update play button to show what was unlocked
+    // Auto-update home leaderboard after payment
+    Leaderboard.render('home-leaderboard-container');
+
+    // Update play button
     const playBtn = document.querySelector('#step-unlocked .btn-play');
     if (levelIdx !== null) {
       playBtn.textContent = `🎮 Start Level ${levelIdx + 1}!`;
       playBtn.onclick = () => {
         document.getElementById('wallet-gate').classList.remove('active');
-        // Ensure game is visible
         document.getElementById('game-container').style.display = 'block'; 
         loadLevel(levelIdx);
       };
-      // Auto-start after a short delay for even more seamlessness
-      setTimeout(() => {
-        if (document.getElementById('wallet-gate').classList.contains('active')) {
-          playBtn.click();
-        }
-      }, 1500);
     } else {
-      playBtn.textContent = '🎮 Start Playing!';
-      playBtn.onclick = startGame;
+      playBtn.textContent = '🎮 Continue to Game';
+      playBtn.onclick = checkRegistration;
     }
 
   } catch (e) {
@@ -166,6 +163,7 @@ function isLevelUnlocked(idx) {
 async function showLevelPaymentGate(levelIdx) {
   const gate = document.getElementById('wallet-gate');
   gate.classList.add('active');
+  Leaderboard.render('home-leaderboard-container'); // Refresh leaderboard on gate show
   
   // Reset steps
   document.querySelectorAll('.gate-step').forEach(s => s.classList.remove('active'));
@@ -200,7 +198,28 @@ function resetAllProgress() {
   localStorage.removeItem(UNLOCKED_LEVELS_KEY);
   localStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(LAST_ACTIVE_KEY);
+  localStorage.removeItem(USERNAME_KEY);
   location.reload();
+}
+
+function checkRegistration() {
+  const name = localStorage.getItem(USERNAME_KEY);
+  if (!name) {
+    showGateStep('step-register');
+  } else {
+    startGame();
+  }
+}
+
+function registerUser() {
+  const input = document.getElementById('reg-username');
+  const name = input.value.trim();
+  if (!name) {
+    showGateError('Please enter a username');
+    return;
+  }
+  localStorage.setItem(USERNAME_KEY, name);
+  startGame();
 }
 
 function shortTx(hash) { return hash.slice(0, 10) + '…' + hash.slice(-6); }
@@ -260,6 +279,8 @@ function retryOrPay() {
 
 // On load: check if already paid or debug mode
 window.addEventListener('DOMContentLoaded', () => {
+  Leaderboard.render('home-leaderboard-container'); // Initial render
+  
   if (checkExistingSession()) {
     showGateStep('step-unlocked');
     document.getElementById('btn-pay') && (document.getElementById('btn-pay').disabled = false);
