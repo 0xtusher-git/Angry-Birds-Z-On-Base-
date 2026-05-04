@@ -104,9 +104,10 @@ async function payToPlay(levelIdx = null) {
   }
 
   const btn = document.getElementById('btn-pay');
-  btn.disabled = true;
+  if (btn) btn.disabled = true;
   document.getElementById('gate-error').style.display = 'none';
   try {
+    console.log('Initiating payment for level:', levelIdx);
     if (!signer) throw new Error('Wallet not connected');
     const network = await provider.getNetwork();
     if (Number(network.chainId) !== BASE_CHAIN_ID) {
@@ -203,7 +204,11 @@ async function showLevelPaymentGate(levelIdx) {
   if (priceDesc) priceDesc.textContent = `to unlock Level ${levelIdx + 1}`;
   
   const payBtn = document.getElementById('btn-pay');
-  payBtn.onclick = () => payToPlay(levelIdx);
+  if (payBtn) {
+    payBtn.disabled = false;
+    payBtn.innerHTML = '<span class="btn-icon">⚡</span> Pay to Play';
+    payBtn.onclick = () => payToPlay(levelIdx);
+  }
   
   // Try to reconnect signer if null
   if (!signer && window.ethereum) {
