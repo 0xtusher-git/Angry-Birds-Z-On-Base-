@@ -181,8 +181,9 @@ async function payToPlay(levelIdx = null) {
 }
 
 function isLevelUnlocked(idx) {
-  // To make it truly "pay every level", even Level 1 could require payment.
-  // But usually Level 1 is free to try. Let's keep Level 1 free as a hook.
+  // If in debug mode, all levels are unlocked
+  if (localStorage.getItem('abz_debug') === 'true') return true;
+  
   if (idx === 0) return true; 
   
   const unlocked = JSON.parse(localStorage.getItem(UNLOCKED_LEVELS_KEY) || '[]');
