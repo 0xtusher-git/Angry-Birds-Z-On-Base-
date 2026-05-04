@@ -5,22 +5,13 @@
 const Leaderboard = {
   storageKey: 'abz_leaderboard',
   
-  // Mock global data for the "Global" feel
-  mockData: [
-    { name: 'Vitalik.eth', score: 125400, level: 15 },
-    { name: 'BaseGod', score: 98200, level: 14 },
-    { name: 'JessePollak', score: 87500, level: 12 },
-    { name: 'AngryDev', score: 76400, level: 11 },
-    { name: 'Satoshi', score: 65000, level: 10 },
-    { name: 'BlueBird', score: 43200, level: 8 },
-    { name: 'PigSmash', score: 21000, level: 5 },
-    { name: 'OnBase', score: 15400, level: 3 },
-    { name: 'Builder', score: 8200, level: 2 },
-  ],
+  mockData: [],
 
   init() {
-    if (!localStorage.getItem(this.storageKey)) {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.mockData));
+    // Only init if empty or has fake data
+    const existing = localStorage.getItem(this.storageKey);
+    if (!existing || existing.includes('Vitalik.eth')) {
+      localStorage.setItem(this.storageKey, JSON.stringify([]));
     }
   },
 
@@ -51,14 +42,16 @@ const Leaderboard = {
         <span>Score</span>
       </div>
       <div class="lb-list">
-        ${scores.map((s, i) => `
-          <div class="lb-row ${s.isUser ? 'user-row' : ''}">
-            <span class="lb-rank">${i + 1}</span>
-            <span class="lb-name">${s.name}</span>
-            <span class="lb-level">Lvl ${s.level}</span>
-            <span class="lb-score">${s.score.toLocaleString()}</span>
-          </div>
-        `).join('')}
+        ${scores.length === 0 ? '<div class="lb-empty">Waiting for the first On-Chain Champion...</div>' : 
+          scores.map((s, i) => `
+            <div class="lb-row ${s.isUser ? 'user-row' : ''}">
+              <span class="lb-rank">${i + 1}</span>
+              <span class="lb-name">${s.name}</span>
+              <span class="lb-level">Lvl ${s.level}</span>
+              <span class="lb-score">${s.score.toLocaleString()}</span>
+            </div>
+          `).join('')
+        }
       </div>
     `;
   }
