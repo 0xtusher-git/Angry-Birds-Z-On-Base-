@@ -11,21 +11,12 @@ const LEVELS = [
   {
     id: 1,
     name: 'Piggy Paradise',
-    birds: ['red', 'red', 'red'],
+    birds: ['red', 'red', 'red', 'red'],
     parScore: 3000,
-    pigs: [
-      { type: 'small', x: 0.72, y: 0.75 },
-      { type: 'helmet', x: 0.82, y: 0.75 },
-    ],
+    pigs: [{ type: 'small', x: 0.75, y: 0.75 }],
     blocks: [
-      // Simple wood tower around pig 1
-      { type: 'wood', shape: 'rect', x: 0.70, y: 0.88, w: 0.04, h: 0.12 },
-      { type: 'wood', shape: 'rect', x: 0.74, y: 0.88, w: 0.04, h: 0.12 },
-      { type: 'wood', shape: 'rect', x: 0.70, y: 0.77, w: 0.08, h: 0.025 },
-      // Tower 2
-      { type: 'wood', shape: 'rect', x: 0.80, y: 0.88, w: 0.04, h: 0.12 },
-      { type: 'wood', shape: 'rect', x: 0.84, y: 0.88, w: 0.04, h: 0.12 },
-      { type: 'wood', shape: 'rect', x: 0.80, y: 0.77, w: 0.08, h: 0.025 },
+      { type: 'glass', shape: 'rect', x: 0.72, y: 0.88, w: 0.06, h: 0.12 },
+      { type: 'glass', shape: 'rect', x: 0.72, y: 0.77, w: 0.06, h: 0.025 },
     ]
   },
 
@@ -36,114 +27,247 @@ const LEVELS = [
     birds: ['red', 'red', 'yellow', 'yellow'],
     parScore: 5000,
     pigs: [
-      { type: 'small',  x: 0.68, y: 0.78 },
-      { type: 'small',  x: 0.78, y: 0.78 },
-      { type: 'helmet', x: 0.88, y: 0.78 },
+      { type: 'small',  x: 0.70, y: 0.78 },
+      { type: 'small',  x: 0.82, y: 0.78 },
     ],
     blocks: [
-      // glass enclosures
-      { type: 'glass', shape: 'rect', x: 0.65, y: 0.87, w: 0.03, h: 0.13 },
-      { type: 'glass', shape: 'rect', x: 0.71, y: 0.87, w: 0.03, h: 0.13 },
-      { type: 'glass', shape: 'rect', x: 0.65, y: 0.775, w: 0.09, h: 0.02 },
-      { type: 'glass', shape: 'rect', x: 0.75, y: 0.87, w: 0.03, h: 0.13 },
-      { type: 'glass', shape: 'rect', x: 0.81, y: 0.87, w: 0.03, h: 0.13 },
-      { type: 'glass', shape: 'rect', x: 0.75, y: 0.775, w: 0.09, h: 0.02 },
-      // wood top
-      { type: 'wood',  shape: 'rect', x: 0.85, y: 0.87, w: 0.04, h: 0.13 },
-      { type: 'wood',  shape: 'rect', x: 0.86, y: 0.775, w: 0.06, h: 0.02 },
+      { type: 'glass', shape: 'rect', x: 0.67, y: 0.87, w: 0.04, h: 0.13 },
+      { type: 'glass', shape: 'rect', x: 0.73, y: 0.87, w: 0.04, h: 0.13 },
+      { type: 'glass', shape: 'rect', x: 0.67, y: 0.775, w: 0.10, h: 0.02 },
+      { type: 'glass', shape: 'rect', x: 0.79, y: 0.87, w: 0.04, h: 0.13 },
+      { type: 'glass', shape: 'rect', x: 0.85, y: 0.87, w: 0.04, h: 0.13 },
+      { type: 'glass', shape: 'rect', x: 0.79, y: 0.775, w: 0.10, h: 0.02 },
     ]
   },
 
-  // ── LEVEL 3: Split Practice ─────────────────
+  // ── LEVEL 3: Wood Stack ─────────────────────
   {
     id: 3,
-    name: 'Split Practice',
+    name: 'Wood Stack',
     birds: ['red', 'blue', 'blue', 'red'],
     parScore: 6500,
     pigs: [
-      { type: 'small',  x: 0.63, y: 0.78 },
-      { type: 'helmet', x: 0.73, y: 0.78 },
-      { type: 'small',  x: 0.83, y: 0.78 },
-      { type: 'medium', x: 0.78, y: 0.64 },
+      { type: 'small',  x: 0.65, y: 0.78 },
+      { type: 'medium', x: 0.75, y: 0.78 },
     ],
     blocks: [
-      // three separate glass towers
-      { type: 'glass', shape: 'rect', x: 0.61, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.64, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.61, y: 0.78, w: 0.06, h: 0.02 },
-      { type: 'glass', shape: 'rect', x: 0.71, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.74, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.71, y: 0.78, w: 0.06, h: 0.02 },
-      { type: 'glass', shape: 'rect', x: 0.81, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.84, y: 0.88, w: 0.03, h: 0.12 },
-      { type: 'glass', shape: 'rect', x: 0.81, y: 0.78, w: 0.06, h: 0.02 },
-      // elevated platform
-      { type: 'wood', shape: 'rect', x: 0.73, y: 0.72, w: 0.12, h: 0.025 },
-      { type: 'wood', shape: 'rect', x: 0.73, y: 0.745, w: 0.035, h: 0.06 },
-      { type: 'wood', shape: 'rect', x: 0.805, y: 0.745, w: 0.035, h: 0.06 },
+      { type: 'wood', shape: 'rect', x: 0.62, y: 0.88, w: 0.04, h: 0.12 },
+      { type: 'wood', shape: 'rect', x: 0.68, y: 0.88, w: 0.04, h: 0.12 },
+      { type: 'wood', shape: 'rect', x: 0.62, y: 0.78, w: 0.10, h: 0.025 },
+      { type: 'wood', shape: 'rect', x: 0.72, y: 0.88, w: 0.04, h: 0.12 },
+      { type: 'wood', shape: 'rect', x: 0.78, y: 0.88, w: 0.04, h: 0.12 },
+      { type: 'wood', shape: 'rect', x: 0.72, y: 0.78, w: 0.10, h: 0.025 },
     ]
   },
 
-  // ── LEVEL 4: Stone Fortress ─────────────────
+  // ── LEVEL 4: Simple Fortress ────────────────
   {
     id: 4,
-    name: 'Stone Fortress',
-    birds: ['yellow', 'yellow', 'black', 'black', 'red'],
-    parScore: 9000,
+    name: 'Simple Fortress',
+    birds: ['yellow', 'yellow', 'red', 'red'],
+    parScore: 8000,
     pigs: [
-      { type: 'medium',  x: 0.68, y: 0.78 },
-      { type: 'medium',  x: 0.80, y: 0.78 },
-      { type: 'helmet',  x: 0.74, y: 0.60 },
-      { type: 'helmet',  x: 0.86, y: 0.78 },
+      { type: 'small',  x: 0.70, y: 0.78 },
+      { type: 'helmet', x: 0.80, y: 0.78 },
     ],
     blocks: [
-      // outer stone walls
-      { type: 'stone', shape: 'rect', x: 0.64, y: 0.80, w: 0.035, h: 0.20 },
-      { type: 'stone', shape: 'rect', x: 0.90, y: 0.80, w: 0.035, h: 0.20 },
-      { type: 'stone', shape: 'rect', x: 0.675, y: 0.77, w: 0.225, h: 0.03 },
-      // inner wood
-      { type: 'wood', shape: 'rect', x: 0.68, y: 0.83, w: 0.05, h: 0.17 },
-      { type: 'wood', shape: 'rect', x: 0.84, y: 0.83, w: 0.05, h: 0.17 },
-      // upper platform
-      { type: 'stone', shape: 'rect', x: 0.695, y: 0.655, w: 0.09, h: 0.025 },
-      { type: 'stone', shape: 'rect', x: 0.695, y: 0.68, w: 0.025, h: 0.10 },
-      { type: 'stone', shape: 'rect', x: 0.76,  y: 0.68, w: 0.025, h: 0.10 },
-      // cross-beam
-      { type: 'wood', shape: 'rect', x: 0.675, y: 0.745, w: 0.14, h: 0.02 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.80, w: 0.04, h: 0.18 },
+      { type: 'wood',  shape: 'rect', x: 0.75, y: 0.80, w: 0.04, h: 0.18 },
+      { type: 'glass', shape: 'rect', x: 0.65, y: 0.77, w: 0.14, h: 0.03 },
     ]
   },
 
-  // ── LEVEL 5: King's Castle ──────────────────
+  // ── LEVEL 5: Glass Tower ────────────────────
   {
     id: 5,
-    name: "King's Castle",
-    birds: ['black', 'yellow', 'blue', 'black', 'red'],
-    parScore: 14000,
+    name: 'Glass Tower',
+    birds: ['blue', 'blue', 'yellow', 'red'],
+    parScore: 10000,
     pigs: [
-      { type: 'small',   x: 0.62, y: 0.78 },
-      { type: 'helmet',  x: 0.72, y: 0.78 },
-      { type: 'helmet',  x: 0.85, y: 0.78 },
-      { type: 'helmet',  x: 0.79, y: 0.60 },
-      { type: 'king',    x: 0.79, y: 0.44 },
+      { type: 'small',  x: 0.75, y: 0.78 },
+      { type: 'small',  x: 0.75, y: 0.65 },
     ],
     blocks: [
-      // Castle base
-      { type: 'stone', shape: 'rect', x: 0.60, y: 0.82, w: 0.04, h: 0.18 },
-      { type: 'stone', shape: 'rect', x: 0.88, y: 0.82, w: 0.04, h: 0.18 },
-      { type: 'stone', shape: 'rect', x: 0.64, y: 0.76, w: 0.24, h: 0.03 },
-      // Mid level
-      { type: 'wood',  shape: 'rect', x: 0.66, y: 0.82, w: 0.04, h: 0.12 },
-      { type: 'wood',  shape: 'rect', x: 0.84, y: 0.82, w: 0.04, h: 0.12 },
-      { type: 'stone', shape: 'rect', x: 0.66, y: 0.585, w: 0.26, h: 0.025 },
-      { type: 'stone', shape: 'rect', x: 0.68, y: 0.61, w: 0.03, h: 0.16 },
-      { type: 'stone', shape: 'rect', x: 0.83, y: 0.61, w: 0.03, h: 0.16 },
-      // Upper tower
-      { type: 'stone', shape: 'rect', x: 0.72, y: 0.42, w: 0.14, h: 0.025 },
-      { type: 'stone', shape: 'rect', x: 0.72, y: 0.445, w: 0.03, h: 0.14 },
-      { type: 'stone', shape: 'rect', x: 0.83, y: 0.445, w: 0.03, h: 0.14 },
-      // glass windows
-      { type: 'glass', shape: 'rect', x: 0.755, y: 0.62, w: 0.07, h: 0.025 },
-      { type: 'glass', shape: 'rect', x: 0.755, y: 0.47, w: 0.07, h: 0.025 },
+      { type: 'glass', shape: 'rect', x: 0.70, y: 0.88, w: 0.10, h: 0.12 },
+      { type: 'glass', shape: 'rect', x: 0.70, y: 0.78, w: 0.10, h: 0.03 },
+      { type: 'glass', shape: 'rect', x: 0.72, y: 0.73, w: 0.06, h: 0.08 },
+      { type: 'glass', shape: 'rect', x: 0.72, y: 0.63, w: 0.06, h: 0.02 },
+    ]
+  },
+
+  // ── LEVEL 6-10: Medium Difficulty ───────────
+  {
+    id: 6,
+    name: 'Stone Wall',
+    birds: ['red', 'yellow', 'black'],
+    parScore: 12000,
+    pigs: [
+      { type: 'medium', x: 0.70, y: 0.78 },
+      { type: 'helmet', x: 0.85, y: 0.78 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.82, w: 0.04, h: 0.18 },
+      { type: 'stone', shape: 'rect', x: 0.75, y: 0.82, w: 0.04, h: 0.18 },
+      { type: 'stone', shape: 'rect', x: 0.85, y: 0.82, w: 0.04, h: 0.18 },
+      { type: 'wood',  shape: 'rect', x: 0.65, y: 0.76, w: 0.24, h: 0.03 },
+    ]
+  },
+  {
+    id: 7,
+    name: 'Wood Castle',
+    birds: ['yellow', 'yellow', 'blue', 'red'],
+    parScore: 15000,
+    pigs: [
+      { type: 'small',  x: 0.65, y: 0.78 },
+      { type: 'medium', x: 0.75, y: 0.78 },
+      { type: 'small',  x: 0.85, y: 0.78 },
+    ],
+    blocks: [
+      { type: 'wood', shape: 'rect', x: 0.60, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'wood', shape: 'rect', x: 0.70, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'wood', shape: 'rect', x: 0.80, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'wood', shape: 'rect', x: 0.90, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'wood', shape: 'rect', x: 0.60, y: 0.75, w: 0.34, h: 0.04 },
+    ]
+  },
+  {
+    id: 8,
+    name: 'The Triplets',
+    birds: ['blue', 'blue', 'black'],
+    parScore: 18000,
+    pigs: [
+      { type: 'helmet', x: 0.65, y: 0.78 },
+      { type: 'helmet', x: 0.75, y: 0.78 },
+      { type: 'helmet', x: 0.85, y: 0.78 },
+    ],
+    blocks: [
+      { type: 'glass', shape: 'rect', x: 0.62, y: 0.88, w: 0.06, h: 0.12 },
+      { type: 'glass', shape: 'rect', x: 0.72, y: 0.88, w: 0.06, h: 0.12 },
+      { type: 'glass', shape: 'rect', x: 0.82, y: 0.88, w: 0.06, h: 0.12 },
+      { type: 'stone', shape: 'rect', x: 0.62, y: 0.78, w: 0.26, h: 0.03 },
+    ]
+  },
+  {
+    id: 9,
+    name: 'Stone Guard',
+    birds: ['black', 'yellow', 'red', 'red'],
+    parScore: 20000,
+    pigs: [
+      { type: 'medium', x: 0.70, y: 0.70 },
+      { type: 'king',   x: 0.85, y: 0.78 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.85, w: 0.05, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.80, y: 0.85, w: 0.05, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.75, w: 0.20, h: 0.04 },
+      { type: 'wood',  shape: 'rect', x: 0.68, y: 0.65, w: 0.04, h: 0.10 },
+    ]
+  },
+  {
+    id: 10,
+    name: 'Hardened Post',
+    birds: ['yellow', 'black', 'blue', 'red'],
+    parScore: 22000,
+    pigs: [
+      { type: 'helmet', x: 0.70, y: 0.78 },
+      { type: 'helmet', x: 0.80, y: 0.78 },
+      { type: 'small',  x: 0.75, y: 0.60 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.85, y: 0.80, w: 0.04, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.75, w: 0.24, h: 0.03 },
+      { type: 'wood',  shape: 'rect', x: 0.70, y: 0.65, w: 0.14, h: 0.03 },
+    ]
+  },
+
+  // ── LEVEL 11-15: Hard Difficulty ────────────
+  {
+    id: 11,
+    name: 'The King\'s Den',
+    birds: ['red', 'yellow', 'black'],
+    parScore: 25000,
+    pigs: [
+      { type: 'king',   x: 0.80, y: 0.75 },
+      { type: 'helmet', x: 0.70, y: 0.75 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.80, w: 0.06, h: 0.25 },
+      { type: 'stone', shape: 'rect', x: 0.85, y: 0.80, w: 0.06, h: 0.25 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.70, w: 0.26, h: 0.04 },
+      { type: 'stone', shape: 'rect', x: 0.72, y: 0.55, w: 0.12, h: 0.04 },
+    ]
+  },
+  {
+    id: 12,
+    name: 'Fortress Prime',
+    birds: ['black', 'blue', 'red'],
+    parScore: 30000,
+    pigs: [
+      { type: 'helmet', x: 0.65, y: 0.78 },
+      { type: 'helmet', x: 0.85, y: 0.78 },
+      { type: 'king',   x: 0.75, y: 0.55 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.85, w: 0.04, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.70, y: 0.85, w: 0.04, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.80, y: 0.85, w: 0.04, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.90, y: 0.85, w: 0.04, h: 0.15 },
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.78, w: 0.34, h: 0.04 },
+      { type: 'stone', shape: 'rect', x: 0.70, y: 0.65, w: 0.14, h: 0.04 },
+    ]
+  },
+  {
+    id: 13,
+    name: 'Glass & Stone Trap',
+    birds: ['yellow', 'yellow', 'black'],
+    parScore: 35000,
+    pigs: [
+      { type: 'king',   x: 0.75, y: 0.75 },
+      { type: 'medium', x: 0.65, y: 0.60 },
+      { type: 'medium', x: 0.85, y: 0.60 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.90, w: 0.30, h: 0.05 },
+      { type: 'stone', shape: 'rect', x: 0.72, y: 0.80, w: 0.06, h: 0.10 },
+      { type: 'glass', shape: 'rect', x: 0.60, y: 0.70, w: 0.04, h: 0.20 },
+      { type: 'glass', shape: 'rect', x: 0.90, y: 0.70, w: 0.04, h: 0.20 },
+      { type: 'wood',  shape: 'rect', x: 0.60, y: 0.65, w: 0.34, h: 0.03 },
+    ]
+  },
+  {
+    id: 14,
+    name: 'The Gauntlet',
+    birds: ['red', 'blue', 'black'],
+    parScore: 40000,
+    pigs: [
+      { type: 'king',   x: 0.85, y: 0.78 },
+      { type: 'helmet', x: 0.75, y: 0.78 },
+      { type: 'helmet', x: 0.65, y: 0.78 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.80, w: 0.05, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.70, y: 0.80, w: 0.05, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.80, y: 0.80, w: 0.05, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.90, y: 0.80, w: 0.05, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.75, w: 0.35, h: 0.03 },
+    ]
+  },
+  {
+    id: 15,
+    name: 'Final Siege',
+    birds: ['black', 'black', 'yellow'],
+    parScore: 50000,
+    pigs: [
+      { type: 'king',   x: 0.75, y: 0.70 },
+      { type: 'king',   x: 0.75, y: 0.50 },
+    ],
+    blocks: [
+      { type: 'stone', shape: 'rect', x: 0.60, y: 0.85, w: 0.30, h: 0.06 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.65, w: 0.04, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.85, y: 0.65, w: 0.04, h: 0.20 },
+      { type: 'stone', shape: 'rect', x: 0.65, y: 0.60, w: 0.24, h: 0.04 },
+      { type: 'stone', shape: 'rect', x: 0.70, y: 0.45, w: 0.14, h: 0.04 },
     ]
   }
 ];
@@ -152,7 +276,8 @@ const LEVELS = [
 function calcStars(score, pigsDestroyed, totalPigs, blocksDestroyed, totalBlocks, birdsLeft) {
   if (pigsDestroyed < totalPigs) return 0;
   let stars = 1;
-  if (blocksDestroyed >= Math.floor(totalBlocks * 0.5)) stars = 2;
-  if (blocksDestroyed >= Math.floor(totalBlocks * 0.8) && birdsLeft > 0) stars = 3;
+  if (blocksDestroyed >= Math.floor(totalBlocks * 0.4)) stars = 2; // Made easier to get stars
+  if (blocksDestroyed >= Math.floor(totalBlocks * 0.7) && birdsLeft > 0) stars = 3;
   return stars;
 }
+

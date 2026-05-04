@@ -414,3 +414,96 @@ html, body {
   #hud { height: 40px; }
   .hud-value { font-size: 1rem; }
 }
+
+/* ── LEADERBOARD ── */
+.lb-card {
+  width: 90%;
+  max-width: 450px;
+  max-height: 80vh;
+}
+
+.leaderboard-container {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  margin: 15px 0;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.lb-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 60px 80px;
+  font-weight: 800;
+  color: #ffde59;
+  font-size: 0.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  margin-bottom: 8px;
+}
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 60px 80px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.lb-rank { font-weight: 900; color: #a29bfe; }
+.lb-name { font-weight: 600; text-align: left; padding-left: 5px; overflow: hidden; text-overflow: ellipsis; }
+.lb-level { color: #81ecec; font-size: 0.75rem; }
+.lb-score { font-weight: 800; color: #fab1a0; text-align: right; }
+
+.user-row {
+  background: rgba(255, 222, 89, 0.15);
+  border-radius: 6px;
+}
+
+/* ── LB SUBMIT ── */
+.lb-submit-box {
+  margin: 15px 0;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.lb-submit-box input {
+  flex: 1;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: white;
+  padding: 8px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+.btn-submit {
+  background: #ffde59;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btn-submit:disabled {
+  background: #555;
+  color: #aaa;
+  cursor: default;
+}
+
+.screen-buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.screen-buttons-row .btn-secondary {
+  flex: 1;
+}

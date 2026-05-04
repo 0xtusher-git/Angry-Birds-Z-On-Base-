@@ -69,6 +69,10 @@ window.addEventListener('resize', () => {
 
 // ── LEVEL LOAD ─────────────────────────────
 function loadLevel(idx) {
+  if (!isLevelUnlocked(idx)) {
+    showLevelPaymentGate(idx);
+    return;
+  }
   G.currentLevel = idx;
   const lvl = LEVELS[idx];
   G.birdQueue = [...lvl.birds];
@@ -435,7 +439,7 @@ function updateHUD() {
 
 // ── SCREENS ────────────────────────────────
 function hideAllScreens() {
-  ['screen-levelselect','screen-complete','screen-gameover'].forEach(id => {
+  ['screen-levelselect','screen-complete','screen-gameover','screen-leaderboard'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -449,7 +453,7 @@ function showLevelSelect() {
   grid.innerHTML = '';
   LEVELS.forEach((lvl, i) => {
     const saved = JSON.parse(localStorage.getItem('abz_lvl_' + (i+1)) || '{"stars":0}');
-    const unlocked = i === 0 || !!localStorage.getItem('abz_lvl_' + i);
+    const unlocked = isLevelUnlocked(i);
     const stars = '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars);
     const card = document.createElement('div');
     card.className = 'level-card' + (unlocked ? '' : ' locked');
@@ -491,8 +495,13 @@ function showGameOver() {
 }
 
 function nextLevel() {
-  if (G.currentLevel < LEVELS.length - 1) {
-    loadLevel(G.currentLevel + 1);
+  const nextIdx = G.currentLevel + 1;
+  if (nextIdx < LEVELS.length) {
+    if (isLevelUnlocked(nextIdx)) {
+      loadLevel(nextIdx);
+    } else {
+      showLevelPaymentGate(nextIdx);
+    }
   } else {
     showLevelSelect();
   }
@@ -500,6 +509,23 @@ function nextLevel() {
 
 function restartLevel() {
   loadLevel(G.currentLevel);
+}
+
+function showLeaderboard() {
+  hideAllScreens();
+  document.getElementById('screen-leaderboard').style.display = 'flex';
+  Leaderboard.render('leaderboard-container');
+}
+
+function submitCurrentScore() {
+  const nameInput = document.getElementById('player-name');
+  const name = nameInput.value.trim() || 'Anonymous';
+  Leaderboard.submitScore(name, G.score, G.currentLevel + 1);
+  
+  const btn = document.getElementById('btn-submit-score');
+  btn.textContent = '✅ Submitted!';
+  btn.disabled = true;
+  nameInput.disabled = true;
 }
 
 function togglePause() {

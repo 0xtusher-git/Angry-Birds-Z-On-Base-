@@ -9,6 +9,7 @@ const PLAY_COST_WEI = '1000000000000'; // 0.000001 ETH
 const SESSION_KEY = 'abz_session';
 const LAST_ACTIVE_KEY = 'abz_last_active';
 const MAX_IDLE_TIME = 5 * 60 * 1000; // 5 minutes in ms
+const UNLOCKED_LEVELS_KEY = 'abz_unlocked_levels';
 
 let provider = null;
 let signer = null;
@@ -70,7 +71,7 @@ async function switchToBase() {
   }
 }
 
-async function payToPlay() {
+async function payToPlay(levelIdx = null) {
   const btn = document.getElementById('btn-pay');
   btn.disabled = true;
   document.getElementById('gate-error').style.display = 'none';
@@ -87,10 +88,12 @@ async function payToPlay() {
 
     showGateStep('step-confirming');
 
+    // Add level info to tx data if unlocking a specific level
+    const memo = levelIdx !== null ? `Unlock Level ${levelIdx + 1}` : 'Play Session';
     const tx = await signer.sendTransaction({
       to: TREASURY, 
       value: BigInt(PLAY_COST_WEI),
-      data: ethers.hexlify(ethers.toUtf8Bytes('bc_rato96t7'))
+      data: ethers.hexlify(ethers.toUtf8Bytes('bc_rato96t7_' + memo))
     });
 
     const txLink = 'https://basescan.org/tx/' + tx.hash;
@@ -103,11 +106,36 @@ async function payToPlay() {
     // Save session
     const session = { txHash: tx.hash, ts: Date.now() };
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    
+    // Track unlocked level
+    if (levelIdx !== null) {
+      const unlocked = JSON.parse(localStorage.getItem(UNLOCKED_LEVELS_KEY) || '[]');
+      if (!unlocked.includes(levelIdx)) {
+        unlocked.push(levelIdx);
+        localStorage.setItem(UNLOCKED_LEVELS_KEY, JSON.stringify(unlocked));
+      }
+    }
+    
     updateLastActive();
 
     document.getElementById('tx-link-final').href = txLink;
     document.getElementById('tx-link-final').textContent = shortTx(tx.hash) + ' → Basescan';
     showGateStep('step-unlocked');
+    
+    // Update play button to show what was unlocked
+    const playBtn = document.querySelector('#step-unlocked .btn-play');
+    if (levelIdx !== null) {
+      playBtn.textContent = `🎮 Start Level ${levelIdx + 1}!`;
+      playBtn.onclick = () => {
+        document.getElementById('wallet-gate').classList.remove('active');
+        document.getElementById('game-container').style.display = 'block';
+        loadLevel(levelIdx);
+      };
+    } else {
+      playBtn.textContent = '🎮 Start Playing!';
+      playBtn.onclick = startGame;
+    }
+
   } catch (e) {
     showGateStep('step-pay');
     btn.disabled = false;
@@ -117,6 +145,44 @@ async function payToPlay() {
       showGateError(e.message || 'Payment failed');
     }
   }
+}
+
+function isLevelUnlocked(idx) {
+  // To make it truly "pay every level", even Level 1 could require payment.
+  // But usually Level 1 is free to try. Let's keep Level 1 free as a hook.
+  if (idx === 0) return true; 
+  
+  const unlocked = JSON.parse(localStorage.getItem(UNLOCKED_LEVELS_KEY) || '[]');
+  return unlocked.includes(idx);
+}
+
+function showLevelPaymentGate(levelIdx) {
+  const gate = document.getElementById('wallet-gate');
+  gate.classList.add('active');
+  document.getElementById('game-container').style.display = 'none';
+  
+  // Reset steps
+  document.querySelectorAll('.gate-step').forEach(s => s.classList.remove('active'));
+  
+  // Update UI for specific level unlock
+  const priceDesc = document.querySelector('.price-usd');
+  if (priceDesc) priceDesc.textContent = `to unlock Level ${levelIdx + 1}`;
+  
+  const payBtn = document.getElementById('btn-pay');
+  payBtn.onclick = () => payToPlay(levelIdx);
+  
+  if (signer) {
+    showGateStep('step-pay');
+  } else {
+    showGateStep('step-connect');
+  }
+}
+
+function resetAllProgress() {
+  localStorage.removeItem(UNLOCKED_LEVELS_KEY);
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(LAST_ACTIVE_KEY);
+  location.reload();
 }
 
 function shortTx(hash) { return hash.slice(0, 10) + '…' + hash.slice(-6); }

@@ -94,6 +94,7 @@
       </div>
       <div class="hud-right">
         <div id="bird-queue" class="bird-queue"></div>
+        <button id="btn-lb-hud" class="btn-pause" onclick="showLeaderboard()" style="right: 58px;">🏆</button>
         <button id="btn-pause" class="btn-pause" onclick="togglePause()">⏸</button>
       </div>
     </div>
@@ -106,7 +107,20 @@
       <div class="screen-card">
         <h2 class="screen-title">🗺️ Level Select</h2>
         <div id="level-grid" class="level-grid"></div>
-        <button class="btn-secondary" onclick="showPaymentGate()">🔙 Main Menu</button>
+        <div class="screen-buttons-row">
+          <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
+          <button class="btn-secondary" onclick="showPaymentGate()">🔙 Main Menu</button>
+          <button class="btn-secondary" onclick="resetAllProgress()" style="color: #ff8a80; border-color: rgba(229,57,53,0.3);">🗑️ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Screen -->
+    <div id="screen-leaderboard" class="screen" style="display:none">
+      <div class="screen-card lb-card">
+        <h2 class="screen-title">🏆 Top Bird Smashers</h2>
+        <div id="leaderboard-container" class="leaderboard-container"></div>
+        <button class="btn-primary" onclick="showLevelSelect()">🔙 Back to Game</button>
       </div>
     </div>
 
@@ -121,7 +135,12 @@
           <div class="score-row"><span>Birds Remaining</span><span id="sc-birds">0</span></div>
           <div class="score-row total"><span>TOTAL</span><span id="sc-total">0</span></div>
         </div>
+        <div class="lb-submit-box">
+          <input type="text" id="player-name" placeholder="Enter your name" maxlength="15" />
+          <button id="btn-submit-score" class="btn-submit" onclick="submitCurrentScore()">Submit Score</button>
+        </div>
         <div class="screen-buttons">
+          <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
           <button class="btn-secondary" onclick="showLevelSelect()">🗺️ Level Select</button>
           <button class="btn-primary" id="btn-next-level" onclick="nextLevel()">Next Level →</button>
         </div>
@@ -134,6 +153,7 @@
         <h2 class="screen-title">💀 Game Over</h2>
         <p class="go-desc">You ran out of birds! No pigs destroyed this round.</p>
         <div class="screen-buttons">
+          <button class="btn-secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
           <button class="btn-secondary" onclick="showLevelSelect()">🗺️ Level Select</button>
           <button class="btn-primary" onclick="retryOrPay()">🔄 Retry / Pay Again</button>
         </div>
@@ -145,6 +165,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
   <!-- Game modules (order matters) -->
+  <script src="leaderboard.js"></script>
   <script src="particles.js"></script>
   <script src="renderer.js"></script>
   <script src="levels.js"></script>
