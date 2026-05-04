@@ -73,6 +73,35 @@ async function switchToBase() {
 }
 
 async function payToPlay(levelIdx = null) {
+  // Bypass for local testing
+  if (localStorage.getItem('abz_debug') === 'true') {
+    // Manually trigger success flow
+    const session = { txHash: 'local_debug_' + Date.now(), ts: Date.now() };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    if (levelIdx !== null) {
+      const unlocked = JSON.parse(localStorage.getItem(UNLOCKED_LEVELS_KEY) || '[]');
+      if (!unlocked.includes(levelIdx)) {
+        unlocked.push(levelIdx);
+        localStorage.setItem(UNLOCKED_LEVELS_KEY, JSON.stringify(unlocked));
+      }
+    }
+    updateLastActive();
+    showGateStep('step-unlocked');
+    const playBtn = document.querySelector('#step-unlocked .btn-play');
+    if (levelIdx !== null) {
+      playBtn.textContent = `🎮 Start Level ${levelIdx + 1}!`;
+      playBtn.onclick = () => {
+        document.getElementById('wallet-gate').classList.remove('active');
+        document.getElementById('game-container').style.display = 'block'; 
+        loadLevel(levelIdx);
+      };
+    } else {
+      playBtn.textContent = '🎮 Continue to Game';
+      playBtn.onclick = checkRegistration;
+    }
+    return;
+  }
+
   const btn = document.getElementById('btn-pay');
   btn.disabled = true;
   document.getElementById('gate-error').style.display = 'none';
@@ -209,6 +238,12 @@ function checkRegistration() {
   } else {
     startGame();
   }
+}
+
+function useLocalTesting() {
+  localStorage.setItem('abz_debug', 'true');
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ txHash: 'local_debug', ts: Date.now() }));
+  startGame();
 }
 
 function registerUser() {
