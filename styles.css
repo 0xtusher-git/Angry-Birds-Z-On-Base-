@@ -35,16 +35,18 @@ html, body {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
   z-index: 1000;
-  background: linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 50%, #0d1a2e 100%);
+  background: rgba(13, 13, 26, 0.85); /* More transparent background */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   opacity: 0; pointer-events: none;
   transition: opacity 0.4s ease;
 }
 .overlay.active { opacity: 1; pointer-events: all; }
 
 #wallet-gate {
-  background: url('./assets/banner.png') center/cover no-repeat;
-  align-items: flex-end;
-  padding-bottom: 8vh;
+  /* Remove background image to avoid 'home page' feel */
+  background: none; 
+  padding-bottom: 0;
 }
 #wallet-gate::before {
   display: none;

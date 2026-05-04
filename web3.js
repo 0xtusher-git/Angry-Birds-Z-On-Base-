@@ -128,9 +128,16 @@ async function payToPlay(levelIdx = null) {
       playBtn.textContent = `🎮 Start Level ${levelIdx + 1}!`;
       playBtn.onclick = () => {
         document.getElementById('wallet-gate').classList.remove('active');
-        document.getElementById('game-container').style.display = 'block';
+        // Ensure game is visible
+        document.getElementById('game-container').style.display = 'block'; 
         loadLevel(levelIdx);
       };
+      // Auto-start after a short delay for even more seamlessness
+      setTimeout(() => {
+        if (document.getElementById('wallet-gate').classList.contains('active')) {
+          playBtn.click();
+        }
+      }, 1500);
     } else {
       playBtn.textContent = '🎮 Start Playing!';
       playBtn.onclick = startGame;
@@ -159,12 +166,12 @@ function isLevelUnlocked(idx) {
 function showLevelPaymentGate(levelIdx) {
   const gate = document.getElementById('wallet-gate');
   gate.classList.add('active');
-  document.getElementById('game-container').style.display = 'none';
+  // Don't hide game-container, keep it in background
+  // document.getElementById('game-container').style.display = 'none'; 
   
   // Reset steps
   document.querySelectorAll('.gate-step').forEach(s => s.classList.remove('active'));
   
-  // Update UI for specific level unlock
   const priceDesc = document.querySelector('.price-usd');
   if (priceDesc) priceDesc.textContent = `to unlock Level ${levelIdx + 1}`;
   
@@ -172,7 +179,10 @@ function showLevelPaymentGate(levelIdx) {
   payBtn.onclick = () => payToPlay(levelIdx);
   
   if (signer) {
+    // If already connected, we can try to trigger payment immediately or show the pay step
     showGateStep('step-pay');
+    // Optional: Auto-trigger payToPlay(levelIdx) for maximum seamlessness
+    // payToPlay(levelIdx); 
   } else {
     showGateStep('step-connect');
   }
