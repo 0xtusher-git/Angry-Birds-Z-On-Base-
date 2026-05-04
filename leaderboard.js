@@ -8,7 +8,6 @@ const Leaderboard = {
   mockData: [],
 
   init() {
-    // Only init if empty or has fake data
     const existing = localStorage.getItem(this.storageKey);
     if (!existing || existing.includes('Vitalik.eth')) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
@@ -21,12 +20,32 @@ const Leaderboard = {
 
   submitScore(name, score, level) {
     let scores = this.getScores();
-    scores.push({ name, score, level, ts: Date.now(), isUser: true });
+    
+    // Find if user already has a score
+    const existingIdx = scores.findIndex(s => s.name === name);
+    
+    if (existingIdx !== -1) {
+      // Only update if the new score is higher
+      if (score > scores[existingIdx].score) {
+        scores[existingIdx].score = score;
+        scores[existingIdx].level = level;
+        scores[existingIdx].ts = Date.now();
+      }
+    } else {
+      // Add new player entry
+      scores.push({ name, score, level, ts: Date.now(), isUser: true });
+    }
+    
     // Sort by score descending
     scores.sort((a, b) => b.score - a.score);
-    // Keep top 100
+    // Keep top 100 unique players
     scores = scores.slice(0, 100);
+    
     localStorage.setItem(this.storageKey, JSON.stringify(scores));
+    
+    // IMPORTANT: For true global sync across all users, 
+    // a backend (Firebase/Supabase) is required here.
+    // this.syncWithGlobal(name, score, level); 
   },
 
   render(containerId) {
@@ -42,7 +61,7 @@ const Leaderboard = {
         <span>Score</span>
       </div>
       <div class="lb-list">
-        ${scores.length === 0 ? '<div class="lb-empty">Waiting for the first On-Chain Champion...</div>' : 
+        ${scores.length === 0 ? '<div class="lb-empty">Waiting for the first Champion...</div>' : 
           scores.map((s, i) => `
             <div class="lb-row ${s.isUser ? 'user-row' : ''}">
               <span class="lb-rank">${i + 1}</span>
@@ -57,5 +76,4 @@ const Leaderboard = {
   }
 };
 
-// Initialize on load
 Leaderboard.init();
