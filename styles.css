@@ -402,6 +402,11 @@ html, body {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
+  #wallet-gate {
+    align-items: flex-start;
+    padding-top: 8vh;
+    padding-bottom: 0;
+  }
   .gate-card { padding: 20px 16px; max-width: 280px; }
   .gate-card h1 { font-size: 1.6rem; }
   .screen-card { padding: 24px 18px; }
