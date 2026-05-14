@@ -71,15 +71,15 @@ html, body {
 
 .gate-card {
   position: relative;
-  background: rgba(10, 12, 30, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--card-border);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
   border-radius: var(--radius);
   padding: 30px 24px;
   max-width: 340px;
   width: calc(100% - 32px);
-  box-shadow: var(--shadow), 0 0 60px rgba(86,192,240,0.15);
+  box-shadow: none;
   text-align: center;
   animation: cardIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
