@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   ANGRY BIRDS Z — STYLES
+   ANGRY BIRD BASE — STYLES
    ═══════════════════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,9 +44,11 @@ html, body {
 .overlay.active { opacity: 1; pointer-events: all; }
 
 #wallet-gate {
-  background: url('./assets/banner.png') center/cover no-repeat;
+  background: url('./assets/banner.png?v=2') center/cover no-repeat;
   align-items: flex-end;
+  justify-content: flex-start;
   padding-bottom: 8vh;
+  padding-left: 8vw;
 }
 #wallet-gate::before {
   display: none;
@@ -74,8 +76,8 @@ html, body {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 40px 36px;
-  max-width: 420px;
+  padding: 30px 24px;
+  max-width: 340px;
   width: calc(100% - 32px);
   box-shadow: var(--shadow), 0 0 60px rgba(86,192,240,0.15);
   text-align: center;
