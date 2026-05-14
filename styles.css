@@ -402,8 +402,8 @@ html, body {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
-  .gate-card { padding: 28px 20px; }
-  .gate-card h1 { font-size: 1.9rem; }
+  .gate-card { padding: 20px 16px; max-width: 280px; }
+  .gate-card h1 { font-size: 1.6rem; }
   .screen-card { padding: 24px 18px; }
   .screen-title { font-size: 1.6rem; }
   #hud { height: 48px; }
